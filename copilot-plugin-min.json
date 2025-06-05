@@ -1,0 +1,21 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Trend Vision One Minimal",
+  "name_for_model": "trend_vision_one_minimal",
+  "description_for_human": "Plugin m\u00ednimo de Trend Vision One.",
+  "description_for_model": "Expone un endpoint b\u00e1sico de Trend Vision One.",
+  "auth": {
+    "type": "service_http",
+    "authorization_type": "bearer",
+    "verification_tokens": {
+      "copilot": "YOUR_VERIFICATION_TOKEN"
+    }
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://your-public-url.com/openapi-min.yaml"
+  },
+  "logo_url": "https://your-logo-url.com/logo.png",
+  "contact_email": "support@your-company.com",
+  "legal_info_url": "https://your-company.com/legal"
+}
