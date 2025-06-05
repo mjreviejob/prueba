@@ -1,0 +1,305 @@
+openapi: "3.0.0"
+info:
+  title: "Trend Vision One Public API (Plugin)"
+  description: >
+    Trend Vision One Public API. 
+    **Importante:** Evite enviar información sensible a través de parámetros de URL, 
+    ya que podría quedar registrada en logs o historial. En su lugar utilice los 
+    encabezados personalizados (por ejemplo `TMV1-*`) que la API provee para esos casos.
+  version: "v3.0"
+  contact:
+    name: "Trend Micro"
+    url: "https://www.trendmicro.com"
+  license:
+    name: "Copyright © 2025 Trend Micro Incorporated. All rights reserved."
+    url: "https://www.trendmicro.com"
+servers:
+  - url: "https://api.xdr.trendmicro.com"
+    description: "United States"
+  - url: "https://api.eu.xdr.trendmicro.com"
+    description: "European Union"
+  - url: "https://api.sg.xdr.trendmicro.com"
+    description: "Singapore"
+  - url: "https://api.xdr.trendmicro.co.jp"
+    description: "Japan"
+  - url: "https://api.au.xdr.trendmicro.com"
+    description: "Australia"
+  - url: "https://api.in.xdr.trendmicro.com"
+    description: "India"
+  - url: "https://api.mea.xdr.trendmicro.com"
+    description: "Middle East (UAE)"
+tags:
+  - name: "Workbench"
+    description: "Operaciones sobre alertas (Workbench) en Trend Vision One."
+  - name: "Workbench notes"
+    description: "Gestión de notas asociadas a alertas de Workbench."
+  - name: "Response - Endpoints"
+    description: "Acciones de respuesta remota en endpoints (aislar, restaurar conexión, recopilar ficheros)."
+  # ... (otros grupos de endpoints relevantes) ...
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Token de autenticación Bearer para Trend Vision One. Proporcione el token de API de Trend Vision One en la cabecera **Authorization: Bearer <TOKEN>**."
+  # ... (definiciones de modelos de datos y schemas) ...
+paths:
+  /v3.0/workbench/alerts:
+    get:
+      summary: "Listar alertas de Workbench"
+      description: |
+        Obtiene una lista paginada de alertas (Workbench) que cumplen con criterios opcionales de filtro.
+        *Nota:* Máximo 10 alertas por página; si el resultado excede 50 MB, la respuesta se truncará.
+      tags: ["Workbench"]
+      security:
+        - bearerAuth: []   # Requiere token Bearer
+      parameters:
+        - name: "$filter"
+          in: query
+          description: "Filtro OData para atributos de alerta (p.ej., estado, severidad, etc.)."
+          schema:
+            type: string
+        - name: "$skipToken"
+          in: query
+          description: "Token de paginación para obtener la siguiente página de resultados."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK - Lista de alertas recuperada."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    description: "Conjunto de alertas."
+                    items:
+                      $ref: "#/components/schemas/Alert"   # Referencia a esquema de alerta
+                  nextLink:
+                    type: string
+                    description: "URL para la próxima página de resultados, si existe."
+        "400":
+          description: "Solicitud incorrecta - Filtros inválidos o mal formateados."
+        "401":
+          description: "No autorizado - Token inválido o no proporcionado."
+        "500":
+          description: "Error interno del servidor."
+  /v3.0/workbench/alerts/{alertId}:
+    get:
+      summary: "Obtener detalles de una alerta"
+      description: "Muestra la información detallada de la alerta especificada por `alertId`."
+      tags: ["Workbench"]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "alertId"
+          in: path
+          required: true
+          description: "Identificador único de la alerta de Workbench."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK - Detalles de la alerta proporcionados."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert" 
+        "404":
+          description: "Alerta no encontrada - El `alertId` no existe o no hay acceso."
+    patch:
+      summary: "Actualizar estado de una alerta"
+      description: "Modifica el estado (por ejemplo, activo o cerrado) de la alerta indicada."
+      tags: ["Workbench"]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "alertId"
+          in: path
+          required: true
+          description: "Identificador de la alerta a actualizar."
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: "Nuevo estado para la alerta (por ej., 'In Progress', 'Resolved')."
+                  example: "Resolved"
+      responses:
+        "204":
+          description: "Actualización exitosa (No Content)."
+        "400":
+          description: "Solicitud incorrecta - estado no válido."
+        "404":
+          description: "Alerta no encontrada o sin permisos."
+  /v3.0/workbench/alerts/{alertId}/notes:
+    get:
+      summary: "Listar notas de una alerta"
+      description: "Recupera las notas asociadas a la alerta especificada, en formato paginado."
+      tags: ["Workbench notes"]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "alertId"
+          in: path
+          required: true
+          description: "ID de la alerta cuyos comentarios se listarán."
+          schema:
+            type: string
+        - name: "$skipToken"
+          in: query
+          description: "Token de paginación para obtener la siguiente página de notas."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK - Notas de la alerta listadas correctamente."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AlertNote"
+                  nextLink:
+                    type: string
+                    description: "URL de la siguiente página de notas, si aplica."
+        "404":
+          description: "Alerta o notas no encontradas."
+    post:
+      summary: "Agregar nota a una alerta"
+      description: "Añade una nueva nota al caso de alerta especificado."
+      tags: ["Workbench notes"]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "alertId"
+          in: path
+          required: true
+          description: "ID de la alerta a la que se añadirá la nota."
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["content"]
+              properties:
+                content:
+                  type: string
+                  description: "Contenido de la nota a agregar. Texto plano de hasta 500000 caracteres."
+                  example: "Investigando esta alerta en detalle."
+      responses:
+        "201":
+          description: "Creado - Nota agregada exitosamente."
+          headers:
+            Location:
+              description: "URL de la nueva nota creada."
+              schema:
+                type: string
+        "400":
+          description: "Solicitud incorrecta - formato de nota inválido."
+        "404":
+          description: "Alerta no encontrada."
+  /v3.0/response/endpoints/isolate:
+    post:
+      summary: "Aislar endpoints"
+      description: "Desconecta uno o varios endpoints de la red (aísla del entorno) dado su identificador."
+      tags: ["Response - Endpoints"]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required: ["agentGuid"]
+                properties:
+                  agentGuid:
+                    type: string
+                    description: "GUID (identificador) del agente/endpoint a aislar."
+                  description:
+                    type: string
+                    description: "Motivo o descripción de la acción de aislamiento."
+      responses:
+        "202":
+          description: "Aceptado - Acción de aislamiento iniciada (proceso asíncrono)."
+        "404":
+          description: "Endpoint no encontrado o ya aislado."
+  /v3.0/response/endpoints/restore:
+    post:
+      summary: "Restaurar conexión de endpoint"
+      description: "Reincorpora a la red uno o varios endpoints previamente aislados."
+      tags: ["Response - Endpoints"]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required: ["agentGuid"]
+                properties:
+                  agentGuid:
+                    type: string
+                    description: "GUID del endpoint al que se restaurará la conectividad."
+                  description:
+                    type: string
+                    description: "Comentario o justificante de la restauración."
+      responses:
+        "202":
+          description: "Aceptado - Restauración de red en proceso."
+        "404":
+          description: "Endpoint no encontrado o no estaba aislado."
+  /v3.0/response/endpoints/collectFile:
+    post:
+      summary: "Recopilar archivo de endpoint"
+      description: "Solicita a uno o varios endpoints que recopilen y envíen un archivo específico para análisis."
+      tags: ["Response - Endpoints"]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required: ["agentGuid", "filePath"]
+                properties:
+                  agentGuid:
+                    type: string
+                    description: "GUID del endpoint del que se desea obtener el archivo."
+                  filePath:
+                    type: string
+                    description: "Ruta completa del archivo a recopilar en el endpoint."
+                  description:
+                    type: string
+                    description: "Descripción o motivo de la recolección del archivo."
+      responses:
+        "202":
+          description: "Aceptado - Solicitud de recolección en proceso."
+        "404":
+          description: "Endpoint no encontrado o archivo inaccesible."
+security:
+  - bearerAuth: []   # Autenticación global por token Bearer
