@@ -1,0 +1,25 @@
+{
+  "Descriptor": {
+    "Name": "Trend Micro Conector",
+    "DisplayName": "Trend Micro Conector",
+    "Description": "Trend Micro Conectorn",
+    "DescriptionForModel": "Trend Micro Conector",
+    "SupportedAuthTypes": [
+      "ApiKey"
+    ],
+    "Authorization": {
+      "Type": "APIKey",
+      "Key": "Authorization",
+      "Location": "Header",
+      "AuthScheme": "APIToken"
+    }
+  },
+  "SkillGroups": [
+    {
+      "Format": "API",
+      "Settings": {
+        "OpenApiSpecUrl": "https://automation.trendmicro.com/sp-api-open-v3.0.json"
+      }
+    }
+  ]
+}
