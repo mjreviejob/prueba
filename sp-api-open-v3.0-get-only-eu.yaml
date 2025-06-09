@@ -1,16 +1,3 @@
-info:
-  description: "\n<style>\n.notice-permission {\n    background-color: #eeeeee;\n\
-    \    border: 1px solid #cccccc;\n    padding: 8px 16px 0 16px;\n    font-size:\
-    \ 12px;\n}\n</style>\n\n\nTrend Vision One Public API\n\n## Important\nAvoid submitting\
-    \ sensitive information using query parameters.  \nSensitive information included\
-    \ in URLs can be logged or exposed in unwanted locations such as server logs,\
-    \ browser history, and email messages.  \nOur APIs use custom request headers\
-    \ (such as `TMV1-*`) in some methods to avoid exposing sensitive information.\n"
-  license:
-    name: Copyright © 2025 Trend Micro Incorporated. All rights reserved.
-    url: https://www.trendmicro.com
-  title: Trend Vision One Public API
-  version: v3.0
 openapi: 3.0.1
 servers:
 - url: https://api.eu.xdr.trendmicro.com
