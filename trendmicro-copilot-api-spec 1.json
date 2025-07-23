@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trend Micro Workbench Alerts Plugin",
+    "description": "Retrieve Trend Vision One Workbench alerts and associated analyst notes for use in Microsoft Security Copilot.",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.eu.xdr.trendmicro.com",
+      "description": "Trend Vision One API EU region"
+    }
+  ],
+  "paths": {
+    "/v3.0/workbench/alerts": {
+      "get": {
+        "operationId": "Get_v3_0_Workbench_Alerts",
+        "summary": "List Workbench alerts",
+        "description": "Return a paginated list of Workbench alerts filtered by time range, status, severity, or other fields.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "in": "header",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDateTime",
+            "in": "query",
+            "description": "ISO 8601 UTC start timestamp.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "in": "query",
+            "description": "ISO 8601 UTC end timestamp.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Fields to sort by (e.g., createdDateTime desc).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Workbench alerts."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}/notes": {
+      "get": {
+        "operationId": "Get_v3_0_Workbench_Alert_Notes",
+        "summary": "Get alert notes",
+        "description": "Retrieve all notes associated with a specific Workbench alert.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the alert",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of notes for the alert."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}/notes/{id}": {
+      "get": {
+        "operationId": "Get_v3_0_Workbench_Alert_Note",
+        "summary": "Get a specific alert note",
+        "description": "Retrieve a specific note by ID for a given Workbench alert.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the alert",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the note",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified note."
+          }
+        }
+      }
+    }
+  }
+}
