@@ -1,0 +1,1465 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trend Micro Vision One Plugin",
+    "description": "Retrieve data from Trend Micro Vision One for use in Microsoft Security Copilot.",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.eu.xdr.trendmicro.com",
+      "description": "Trend Vision One API EU region"
+    }
+  ],
+  "paths": {
+    "/v3.0/workbench/alerts": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alerts",
+        "summary": "List Workbench alerts",
+        "description": "Return information about workbench alerts that match the specified criteria in a paginated list.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTimeTarget",
+            "description": "The timestamp to be used for retrieving Workbench alert data.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdDateTime",
+                "updatedDateTime",
+                "firstInvestigatedDateTime"
+              ]
+            }
+          },
+          {
+            "name": "orderBy",
+            "description": "Fields to sort by (e.g., createdDateTime desc).",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Workbench alerts."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}/notes": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alert_Notes",
+        "summary": "Get alert notes",
+        "description": "Return the notes of the specified Workbench alert in a paginated list.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "alertId",
+            "description": "ID of the alert.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTimeTarget",
+            "description": "Parameter that allows you to filter the retrieved Workbench alert notes.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdDateTime",
+                "lastUpdatedDateTime"
+              ]
+            }
+          },
+          {
+            "name": "orderBy",
+            "description": "Fields to sort by (e.g., createdDateTime desc).",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of records displayed on a page.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                50,
+                100,
+                200
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of notes for the alert."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}/notes/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alert_Note",
+        "summary": "Get alert note",
+        "description": "Return the specified Workbench alert note.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "description": "ID of the alert.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "description": "ID of the note.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified note."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/amazonEcsSensorEventLogs": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_AmazonEcsSensorEventLogs",
+        "summary": "Get runtime sensor events (Amazon ECS)",
+        "description": "Return a list of all sensor events on your Amazon ECS clusters.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "required": false
+          },
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of runtime sensor events on Amazon ECS."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/containers": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Containers",
+        "summary": "Get container inventory",
+        "description": "Return a list of container assets in your Container Security environment.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first item in the collection to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of items to return in the collection.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of containers."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/containers/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Container",
+        "summary": "Get container details",
+        "description": "Return information about the specified container asset.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the container.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified container."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/containers/{id}/vulnerabilities": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Container_Vulnerability",
+        "summary": "Get container vulnerabilities",
+        "description": "Return a list of vulnerabilities identified for the specified container.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the container.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first vulnerability to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of vulnerabilities to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of vulnerabilities for the container."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/clusters": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Clusters",
+        "summary": "Get Kubernetes cluster inventory",
+        "description": "Return a list of Kubernetes clusters in your Container Security environment.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of clusters."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/clusters/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Cluster",
+        "summary": "Get Kubernetes cluster details",
+        "description": "Return information about the specified Kubernetes cluster.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the cluster.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified cluster."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/clusters/{id}/observations": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Cluster_Observation",
+        "summary": "Get cluster observations",
+        "description": "Return a list of policy rule observations (failed checks) for the specified Kubernetes cluster.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the cluster.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first observation to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of observations to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of observations for the cluster."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/clusters/{id}/vulnerabilities": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Cluster_Vulnerability",
+        "summary": "Get cluster vulnerabilities",
+        "description": "Return a list of vulnerabilities identified in the specified Kubernetes cluster.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the cluster.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first vulnerability to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of vulnerabilities to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of vulnerabilities for the cluster."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/policies": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Policies",
+        "summary": "Get Kubernetes policies",
+        "description": "Return a list of Kubernetes policy details.",
+        "parameters": [
+          {
+            "name": "offset",
+            "description": "Offset of the first policy to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of policies to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of policies."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/policies/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Policy",
+        "summary": "Get Kubernetes policy details",
+        "description": "Return information about the specified Kubernetes policy.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the policy.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified policy."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/policies/{id}/rules": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Policy_Rules",
+        "summary": "Get policy rules",
+        "description": "Return a list of rules defined in the specified policy.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the policy.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of rules for the policy."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/policies/{id}/rules/{ruleId}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Policy_Rule",
+        "summary": "Get policy rule details",
+        "description": "Return information about the specified policy rule.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the policy.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ruleId",
+            "description": "ID of the rule.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified rule."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/policies/{id}/rulesets": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Policy_Rulesets",
+        "summary": "Get policy rulesets",
+        "description": "Return a list of rulesets used in the specified policy.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the policy.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of rulesets for the policy."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rulesets/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Ruleset",
+        "summary": "Get ruleset details",
+        "description": "Return information about the specified policy ruleset.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the ruleset.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified ruleset."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rulesets/{id}/rules": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Ruleset_Rules",
+        "summary": "Get ruleset rules",
+        "description": "Return a list of rules contained in the specified ruleset.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the ruleset.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of rules for the ruleset."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rules/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Rule",
+        "summary": "Get rule details",
+        "description": "Return information about the specified Container Security rule.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the rule.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified rule."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rules/{id}/occurrences": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Rule_Occurrences",
+        "summary": "Get rule occurrences",
+        "description": "Return a list of failed occurrences of the specified rule.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the rule.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first occurrence to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of occurrences to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of occurrences for the rule."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rules/{id}/images": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Rule_Images",
+        "summary": "Get rule affected images",
+        "description": "Return a list of container images affected by the specified rule.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the rule.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first image to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of images to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of images for the rule."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/rules/{id}/policies": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Rule_Policies",
+        "summary": "Get rule related policies",
+        "description": "Return a list of policies that include the specified rule.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the rule.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of policies for the rule."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/kubernetes/vulnerability": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Kubernetes_Vulnerability",
+        "summary": "Get Kubernetes vulnerability info",
+        "description": "Return an overview of vulnerability findings across your Container Security environment.",
+        "responses": {
+          "200": {
+            "description": "Information about vulnerabilities."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/vulnerabilities": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Vulnerabilities",
+        "summary": "Get container vulnerability inventory",
+        "description": "Return a list of vulnerabilities detected across container assets.",
+        "parameters": [
+          {
+            "name": "offset",
+            "description": "Offset of the first vulnerability to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of vulnerabilities to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of vulnerabilities."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/vulnerabilities/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Vulnerability",
+        "summary": "Get container vulnerability details",
+        "description": "Return information about the specified vulnerability.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the vulnerability.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified vulnerability."
+          }
+        }
+      }
+    },
+    "/v3.0/containerSecurity/vulnerabilities/{id}/images": {
+      "get": {
+        "operationId": "Get_V3_0_ContainerSecurity_Vulnerability_Images",
+        "summary": "Get vulnerability affected images",
+        "description": "Return a list of container images affected by the specified vulnerability.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the vulnerability.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first image to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of images to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of images for the vulnerability."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/ongoing": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alerts_Ongoing",
+        "summary": "Get ongoing alerts",
+        "description": "Return a list of ongoing Workbench alerts (open alerts not yet closed).",
+        "responses": {
+          "200": {
+            "description": "A list of ongoing alerts."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/ongoing/count": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alerts_Ongoing_Count",
+        "summary": "Get ongoing alerts count",
+        "description": "Return the count of ongoing Workbench alerts (open alerts not yet closed).",
+        "responses": {
+          "200": {
+            "description": "The count of ongoing alerts."
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/closed": {
+      "get": {
+        "operationId": "Get_V3_0_Workbench_Alerts_Closed",
+        "summary": "Get closed alerts",
+        "description": "Return a list of closed Workbench alerts.",
+        "responses": {
+          "200": {
+            "description": "A list of closed alerts."
+          }
+        }
+      }
+    },
+    "/v3.0/observedAttackTechniques/detections": {
+      "get": {
+        "operationId": "Get_V3_0_ObservedAttackTechniques_Detections",
+        "summary": "Get attack technique detections",
+        "description": "Return a list of observed attack technique detection events.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first detection to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of detections to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of detections."
+          }
+        }
+      }
+    },
+    "/v3.0/observedAttackTechniques/detections/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ObservedAttackTechniques_Detection",
+        "summary": "Get attack technique detection details",
+        "description": "Return information about the specified attack technique detection event.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the detection event.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified detection."
+          }
+        }
+      }
+    },
+    "/v3.0/observedAttackTechniques/pipeline/detections": {
+      "get": {
+        "operationId": "Get_V3_0_ObservedAttackTechniques_Pipeline_Detections",
+        "summary": "Get pipeline detection records",
+        "description": "Return a list of observed attack technique pipeline detection records.",
+        "parameters": [
+          {
+            "name": "offset",
+            "description": "Offset of the first record to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of records to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of detection records."
+          }
+        }
+      }
+    },
+    "/v3.0/observedAttackTechniques/pipeline/detections/{id}": {
+      "get": {
+        "operationId": "Get_V3_0_ObservedAttackTechniques_Pipeline_Detection",
+        "summary": "Get pipeline detection record details",
+        "description": "Return information about the specified pipeline detection record.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the detection record.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified detection record."
+          }
+        }
+      }
+    },
+    "/v3.0/observedAttackTechniques/pipeline/{id}/links": {
+      "get": {
+        "operationId": "Get_V3_0_ObservedAttackTechniques_Pipeline_Links",
+        "summary": "Get pipeline related links",
+        "description": "Return a list of related detection links for the specified pipeline detection.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of the pipeline detection.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of related links."
+          }
+        }
+      }
+    },
+    "/v3.0/search/query": {
+      "get": {
+        "operationId": "Get_V3_0_Search_Query",
+        "summary": "Search data lake",
+        "description": "Return search results from the data lake for the specified query.",
+        "parameters": [
+          {
+            "name": "query",
+            "description": "The search query string.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first result to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of results to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results."
+          }
+        }
+      }
+    },
+    "/v3.0/search/aggregate": {
+      "get": {
+        "operationId": "Get_V3_0_Search_Aggregate",
+        "summary": "Get search aggregates",
+        "description": "Return aggregated statistics for the specified search query.",
+        "parameters": [
+          {
+            "name": "query",
+            "description": "The search query string for aggregation.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregated search statistics."
+          }
+        }
+      }
+    },
+    "/v3.0/statistics/connectedProducts": {
+      "get": {
+        "operationId": "Get_V3_0_Statistics_ConnectedProducts",
+        "summary": "Get connected product statistics",
+        "description": "Return the connection status of integrated products within a specified time range.",
+        "parameters": [
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics on connected products."
+          }
+        }
+      }
+    },
+    "/v3.0/statistics/endpointSensors": {
+      "get": {
+        "operationId": "Get_V3_0_Statistics_EndpointSensors",
+        "summary": "Get endpoint sensor statistics",
+        "description": "Return statistics on endpoint sensor status within a specified time range.",
+        "parameters": [
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endpoint sensor statistics."
+          }
+        }
+      }
+    },
+    "/v3.0/statistics/riskInsights": {
+      "get": {
+        "operationId": "Get_V3_0_Statistics_RiskInsights",
+        "summary": "Get risk insight statistics",
+        "description": "Return statistics on risk insights for endpoints and users.",
+        "responses": {
+          "200": {
+            "description": "Risk insight statistics."
+          }
+        }
+      }
+    },
+    "/v3.0/statistics/riskTrends": {
+      "get": {
+        "operationId": "Get_V3_0_Statistics_RiskTrends",
+        "summary": "Get risk trend statistics",
+        "description": "Return historical trend data on risk insights over time.",
+        "parameters": [
+          {
+            "name": "startDateTime",
+            "description": "ISO 8601 UTC start timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "description": "ISO 8601 UTC end timestamp.",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Risk trend data."
+          }
+        }
+      }
+    },
+    "/v3.0/imageFiles/analysis": {
+      "get": {
+        "operationId": "Get_V3_0_ImageFiles_Analysis",
+        "summary": "Get sandbox image analysis",
+        "description": "Return analysis results of a submitted image file from Sandbox.",
+        "parameters": [
+          {
+            "name": "sha1",
+            "description": "SHA-1 hash of the image file.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image file analysis results."
+          }
+        }
+      }
+    },
+    "/v3.0/intelligence/reports/latest": {
+      "get": {
+        "operationId": "Get_V3_0_Intelligence_Reports_Latest",
+        "summary": "Get latest intelligence reports",
+        "description": "Return a list of the latest Trend Micro Threat Intelligence reports.",
+        "responses": {
+          "200": {
+            "description": "A list of intelligence reports."
+          }
+        }
+      }
+    },
+    "/v3.0/attackDiscovery/observations": {
+      "get": {
+        "operationId": "Get_V3_0_AttackDiscovery_Observations",
+        "summary": "Get attack surface observations",
+        "description": "Return a list of Attack Surface Discovery observations.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "orderBy",
+            "description": "Fields to sort by (e.g., createdDateTime desc).",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first observation to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of observations to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of observations."
+          }
+        }
+      }
+    },
+    "/v3.0/audit/logs": {
+      "get": {
+        "operationId": "Get_V3_0_Audit_Logs",
+        "summary": "Get audit logs",
+        "description": "Return a list of audit log records for administrative actions.",
+        "parameters": [
+          {
+            "name": "TMV1-Filter",
+            "description": "Trend Micro filter expression (e.g., status eq 'Open' and severity eq 'high').",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Offset of the first log record to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "top",
+            "description": "Number of log records to return.",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of audit logs."
+          }
+        }
+      }
+    },
+    "/v3.0/common/suspiciousObjects": {
+      "get": {
+        "operationId": "Get_V3_0_Common_SuspiciousObjects",
+        "summary": "Get suspicious objects",
+        "description": "Return a list of all global suspicious objects.",
+        "parameters": [
+          {
+            "name": "excludeCPL",
+            "description": "If true, exclude objects from the Suspicious Object List.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of suspicious objects."
+          }
+        }
+      }
+    },
+    "/v3.0/common/suspiciousObjects/{type}/{value}": {
+      "get": {
+        "operationId": "Get_V3_0_Common_SuspiciousObject",
+        "summary": "Check suspicious object",
+        "description": "Return reputation information for the specified suspicious object.",
+        "parameters": [
+          {
+            "name": "type",
+            "description": "Type of the suspicious object (e.g., file-SHA1, URL, etc.).",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "description": "Value of the suspicious object (hash string, URL, etc.).",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the suspicious object."
+          }
+        }
+      }
+    },
+    "/v3.0/common/suspiciousObjects/listEntries/{listId}": {
+      "get": {
+        "operationId": "Get_V3_0_Common_SuspiciousObjects_ListEntry",
+        "summary": "Get suspicious object list entries",
+        "description": "Return a list of entries in the specified Suspicious Object List.",
+        "parameters": [
+          {
+            "name": "listId",
+            "description": "ID of the suspicious object list.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeExpired",
+            "description": "If true, exclude entries that have expired.",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of suspicious object list entries."
+          }
+        }
+      }
+    },
+    "/v3.0/common/suspiciousObjects/listEntries/{listId}/{objectId}": {
+      "get": {
+        "operationId": "Get_V3_0_Common_SuspiciousObjects_ListEntry_Item",
+        "summary": "Get suspicious object list entry",
+        "description": "Return details of the specified entry in a Suspicious Object List.",
+        "parameters": [
+          {
+            "name": "listId",
+            "description": "ID of the suspicious object list.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "objectId",
+            "description": "ID of the suspicious object entry.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specified list entry."
+          }
+        }
+      }
+    },
+    "/v3.0/mitigation/result": {
+      "get": {
+        "operationId": "Get_V3_0_Mitigation_Result",
+        "summary": "Get mitigation result",
+        "description": "Return details of an executed response action by action ID.",
+        "parameters": [
+          {
+            "name": "actionId",
+            "description": "ID of the response action.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the mitigation result."
+          }
+        }
+      }
+    }
+  }
+}
