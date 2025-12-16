@@ -1,0 +1,496 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Trend Vision One Public API for Security Copilot",
+    "description": "API optimizada para Microsoft Security Copilot. Permite consultar alertas, notas de investigación y realizar acciones sobre endpoints en Trend Micro Vision One.",
+    "version": "v3.0",
+    "contact": {
+      "name": "Trend Micro",
+      "url": "https://www.trendmicro.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eu.xdr.trendmicro.com",
+      "description": "European Union Region"
+    },
+    {
+      "url": "https://api.xdr.trendmicro.com",
+      "description": "United States Region"
+    },
+    {
+      "url": "https://api.sg.xdr.trendmicro.com",
+      "description": "Singapore Region"
+    },
+    {
+      "url": "https://api.xdr.trendmicro.co.jp",
+      "description": "Japan Region"
+    },
+    {
+      "url": "https://api.au.xdr.trendmicro.com",
+      "description": "Australia Region"
+    },
+    {
+      "url": "https://api.in.xdr.trendmicro.com",
+      "description": "India Region"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/v3.0/workbench/alerts": {
+      "get": {
+        "operationId": "ListWorkbenchAlerts",
+        "summary": "Listar alertas de seguridad",
+        "description": "Devuelve una lista paginada de alertas del Workbench filtradas por tiempo, estado o severidad.",
+        "parameters": [
+          {
+            "name": "startDateTime",
+            "in": "query",
+            "description": "Fecha de inicio en formato ISO 8601 (ej. 2024-01-01T00:00:00Z).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDateTime",
+            "in": "query",
+            "description": "Fecha de fin en formato ISO 8601.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTimeTarget",
+            "in": "query",
+            "description": "Campo de fecha a filtrar (createdDateTime o updatedDateTime).",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdDateTime",
+                "updatedDateTime"
+              ],
+              "default": "createdDateTime"
+            }
+          },
+          {
+            "name": "TMV1-Filter",
+            "in": "header",
+            "description": "Expresión de filtro OData de Trend Micro (ej. severity eq 'high').",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Número máximo de registros a devolver.",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de alertas recuperada con éxito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkbenchAlertList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}": {
+      "get": {
+        "operationId": "GetWorkbenchAlertDetails",
+        "summary": "Obtener detalles de una alerta",
+        "description": "Recupera información detallada de una alerta específica usando su ID.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "in": "path",
+            "required": true,
+            "description": "Identificador único de la alerta.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalles de la alerta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkbenchAlertDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3.0/workbench/alerts/{alertId}/notes": {
+      "get": {
+        "operationId": "ListAlertNotes",
+        "summary": "Listar notas de una alerta",
+        "description": "Recupera las notas de investigación asociadas a una alerta específica.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "in": "path",
+            "required": true,
+            "description": "ID de la alerta.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de notas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "AddAlertNote",
+        "summary": "Agregar nota a una alerta",
+        "description": "Añade una nueva nota de investigación a una alerta existente.",
+        "parameters": [
+          {
+            "name": "alertId",
+            "in": "path",
+            "required": true,
+            "description": "ID de la alerta.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "description": "El contenido de la nota."
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Nota creada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "noteId": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3.0/response/endpoints/isolate": {
+      "post": {
+        "operationId": "IsolateEndpoint",
+        "summary": "Aislar un endpoint",
+        "description": "Aísla un endpoint de la red para contener una amenaza.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "agentGuid": {
+                      "type": "string",
+                      "description": "El GUID del agente a aislar."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Razón del aislamiento."
+                    }
+                  },
+                  "required": [
+                    "agentGuid"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Acción aceptada para procesamiento.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3.0/search/endpointActivities": {
+      "post": {
+        "operationId": "SearchEndpointActivities",
+        "summary": "Buscar actividad en endpoints",
+        "description": "Busca eventos históricos en los endpoints basándose en criterios específicos.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startDateTime": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "endDateTime": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "criteria": {
+                    "type": "string",
+                    "description": "Consulta de búsqueda (ej. 'processName:cmd.exe')."
+                  }
+                },
+                "required": [
+                  "startDateTime",
+                  "endDateTime"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultados de la búsqueda.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Autenticación mediante Token JWT de Trend Micro Vision One."
+      }
+    },
+    "schemas": {
+      "WorkbenchAlertList": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkbenchAlert"
+            }
+          }
+        }
+      },
+      "WorkbenchAlert": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "string"
+          },
+          "investigationStatus": {
+            "type": "string",
+            "enum": [
+              "New",
+              "In Progress",
+              "Resolved",
+              "False Positive"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low",
+              "info"
+            ]
+          },
+          "score": {
+            "type": "integer"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "impactScope": {
+            "type": "object",
+            "properties": {
+              "desktopCount": {
+                "type": "integer"
+              },
+              "serverCount": {
+                "type": "integer"
+              },
+              "accountCount": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "WorkbenchAlertDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WorkbenchAlert"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "indicators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "NoteList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "creatorName": {
+                  "type": "string"
+                },
+                "createdDateTime": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },
+      "MultiStatusResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "integer"
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "body": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
